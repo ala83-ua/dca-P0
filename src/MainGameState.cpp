@@ -1,5 +1,8 @@
 #include <MainGameState.hpp>
 #include <iostream>
+#include "StateMachine.hpp"
+#include "GameOverState.hpp"
+#include <memory>
 
 extern "C" {
     #include <raylib.h>
@@ -62,8 +65,15 @@ void MainGameState::update(float deltaTime)
     }
 
     //Bounding box del pajaro
-    Rectangle pajaro = {x:player.x-20, y:player.y-20, width:20, height:20};    //origenes y tamaño
+    Rectangle pajaro = {player.x-20, player.y-20, width:40, height:40};    //origenes y tamaño
 
+    //comprobar colisiones
+    for (const auto& p : pipes){                 //recorro la lista de tubos
+        if(CheckCollisionRecs(pajaro, p.top) || CheckCollisionRecs(pajaro, p.bot)){
+            this->state_machine->add_state(std::make_unique<GameOverState>(), true);   //cambiar de estado a GameOverState
+            return;
+        }
+    }
 }
 
 void MainGameState::render()
@@ -79,12 +89,5 @@ void MainGameState::render()
         DrawRectangle(p.bot.x, p.bot.y, p.bot.width, p.bot.height, GREEN);
     }
 
-    EndDrawing();
-}
-
-void MainGameState::gameOverState(){
-    BeginDrawing();
-    ClearBackground(RAYWHITE);
-    DrawText("GAME OVER PAPI", 50, 200, 20, RED);
     EndDrawing();
 }
