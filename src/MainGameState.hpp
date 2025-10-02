@@ -30,7 +30,6 @@ class MainGameState : public GameState
         void handleInput() override;
         void update(float deltaTime) override;
         void render() override;
-        void gameOverState();
 
         void pause(){};
         void resume(){};
@@ -47,6 +46,6 @@ class MainGameState : public GameState
 
         float spawnTimer = 1.5f;           //cada cuanto tiempo aparece un tubo
         float spawnEvery = 1.5f;           //tiempo entre tubos
-        const int PIPE_W = 32;
-        const int PIPE_H = 320;
+        const float PIPE_W = 32;
+        const float PIPE_H = 320;
 };
