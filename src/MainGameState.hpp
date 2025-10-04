@@ -45,7 +45,9 @@ class MainGameState : public GameState
         float PIPE_VELOCITY = 200;
 
         float spawnTimer = 1.5f;           //cada cuanto tiempo aparece un tubo
-        float spawnEvery = 1.5f;           //tiempo entre tubos
-        const float PIPE_W = 32;
-        const float PIPE_H = 320;
-};
+        float spawnEvery = 1.25f;           //tiempo entre tubos
+        float PIPE_W = 32.0f;
+        float PIPE_H = 320.0f;  
+
+        int puntuacion = 0;         
+};  

@@ -12,7 +12,7 @@ int main()
 { 
     float delta_time = GetFrameTime();
 
-    InitWindow(288,512, "FLAPPY BIRD ");
+    InitWindow(512,512, "FLAPPY BIRD ");
 
     StateMachine state_machine = StateMachine();
     state_machine.add_state(std::make_unique<MainGameState>(), false);

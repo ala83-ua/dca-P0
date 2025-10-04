@@ -9,8 +9,8 @@ extern "C" {
 class GameOverState : public GameState{
     
     public:
-
-    GameOverState();                    //constructor 
+    GameOverState(int puntuacion);
+    GameOverState();
     ~GameOverState() = default;         //destructor por defecto
 
     void init() ;                       //metodos virtuales de gameStat
@@ -22,5 +22,6 @@ class GameOverState : public GameState{
     void resume(){};
 
     private:
+    int puntuacion = 0;
         
 };
