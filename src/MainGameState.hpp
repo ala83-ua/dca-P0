@@ -56,4 +56,11 @@ class MainGameState : public GameState
         Texture2D pipeSprite{};
 
         float gap = player.height * 4.5f;
+
+        Sound die;
+        Sound point;
+        Sound swoosh;
+        
+        bool audioReady = false;
+        Music music{};
 };  

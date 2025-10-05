@@ -30,7 +30,14 @@ void MainGameState::init()
     PIPE_H = (float)pipeSprite.height;
     PIPE_W = (float)pipeSprite.width;
 
-    
+    if (!IsAudioDeviceReady()) InitAudioDevice(); 
+    die    = LoadSound("assets/die.wav");
+    point  = LoadSound("assets/point.wav");
+    swoosh = LoadSound("assets/swoosh.wav");        //sonido alas (movimiento)
+       
+    SetSoundVolume(die, 0.8f);
+
+    audioReady = true;
 
 }
 
@@ -38,6 +45,9 @@ void MainGameState::handleInput()
 {
     if (IsKeyPressed(KEY_SPACE)){
         player.vy = -300;
+       /*if (audioReady){
+            PlaySound(swoosh);
+        }*/ 
     }
 }
 
@@ -88,12 +98,16 @@ void MainGameState::update(float deltaTime)
     //comprobar colisiones con tuberias
     for (const auto& p : pipes){                 //recorro la lista de tubos
         if(CheckCollisionRecs(pajaro, p.top) || CheckCollisionRecs(pajaro, p.bot)){
+            if (audioReady){
+                 PlaySound(die);
+            }
             this->state_machine->add_state(std::make_unique<GameOverState>(puntuacion), true);   //cambiar de estado a GameOverState
             return;
         }
     }
 
     //comprobar colision con suelo y techo
+    //X e Y del centro del pajaro + la mitad de su altura 
     if(player.y + player.height/2 >= GetScreenHeight() || player.y - player.height/2 <= 0){
         this->state_machine->add_state(std::make_unique<GameOverState>(puntuacion), true);   //cambiar de estado a GameOverState    
         return;
@@ -102,6 +116,9 @@ void MainGameState::update(float deltaTime)
     //comprobar si ha pasado un tubo para sumar puntuacion
     for (auto& p : pipes){
         if(!p.scored && p.top.x + PIPE_W < player.x){   //si la posicion x del tubo + su ancho es menor que la posicion x del pajaro
+            if (audioReady){
+                PlaySound(point);
+            }
             puntuacion++;                               //sumo puntuacion
             p.scored = true;                        
             std::cout << "Puntuación: " << puntuacion << std::endl; 

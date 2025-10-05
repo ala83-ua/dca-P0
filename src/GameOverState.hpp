@@ -23,5 +23,5 @@ class GameOverState : public GameState{
 
     private:
     int puntuacion = 0;
-        
+    Texture2D gameOverSprite{};
 };
