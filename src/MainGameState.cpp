@@ -20,6 +20,18 @@ void MainGameState::init()
 {
     player.x = 200;
     player.y = 200;
+    
+    birdSprite = LoadTexture("assets/redbird-downflap.png");         //cargo la textura del pajaro
+    pipeSprite = LoadTexture("assets/pipe-green.png");               //cargo la textura del tubo
+
+    player.height = (float)birdSprite.height;
+    player.width = (float)birdSprite.width;
+
+    PIPE_H = (float)pipeSprite.height;
+    PIPE_W = (float)pipeSprite.width;
+
+    
+
 }
 
 void MainGameState::handleInput()
@@ -65,14 +77,26 @@ void MainGameState::update(float deltaTime)
     }
 
     //Bounding box del pajaro
-    Rectangle pajaro = {player.x-20, player.y-20, width:40, height:40};    //origenes y tamaño
+    Rectangle pajaro = {
+        player.x - player.width * 0.5f,
+        player.y- player.height * 0.5f,
+        player.width,
+        player.height
+    };    //origenes y tamaño
+    
 
-    //comprobar colisiones
+    //comprobar colisiones con tuberias
     for (const auto& p : pipes){                 //recorro la lista de tubos
         if(CheckCollisionRecs(pajaro, p.top) || CheckCollisionRecs(pajaro, p.bot)){
             this->state_machine->add_state(std::make_unique<GameOverState>(puntuacion), true);   //cambiar de estado a GameOverState
             return;
         }
+    }
+
+    //comprobar colision con suelo y techo
+    if(player.y + player.height/2 >= GetScreenHeight() || player.y - player.height/2 <= 0){
+        this->state_machine->add_state(std::make_unique<GameOverState>(puntuacion), true);   //cambiar de estado a GameOverState    
+        return;
     }
 
     //comprobar si ha pasado un tubo para sumar puntuacion
@@ -90,17 +114,24 @@ void MainGameState::render()
 {
     BeginDrawing();
     ClearBackground(RAYWHITE);
-    DrawCircle(player.x, player.y, 20, RED);
+    //DrawCircle(player.x, player.y, 20, RED);
    //debuggeo caja pajaro con DrawRectanglePro 
 
 
     for (const auto& p : pipes){                 //dibujo las columnas
-        DrawRectangle(p.top.x, p.top.y, p.top.width, p.top.height, GREEN);
-        DrawRectangle(p.bot.x, p.bot.y, p.bot.width, p.bot.height, GREEN);
+        //DrawRectangle(p.top.x, p.top.y, p.top.width, p.top.height, GREEN);
+        //DrawRectangle(p.bot.x, p.bot.y, p.bot.width, p.bot.height, GREEN);
+        DrawTextureEx(this->pipeSprite, {p.top.x + PIPE_W, p.top.y + PIPE_H}, 180.f, 1.0f, WHITE);
+        DrawTextureEx(this->pipeSprite, {p.bot.x , p.bot.y}, 0.f, 1.0f, WHITE);
     }
 
     std::string s = "Puntuacion: " + std::to_string(puntuacion);
     DrawText(s.c_str(), 10, 10, 20, DARKGRAY);
+
+    //sprite del jugador
+    DrawTexture(this->birdSprite, player.x - birdSprite.width/2, player.y - birdSprite.height/2, WHITE);
+
+    //sprite de las tuberia
 
     EndDrawing();
 }

@@ -16,6 +16,8 @@ class MainGameState : public GameState
             float x;
             float y;
             float vy;
+            float height;
+            float width;
         };
 
         struct PipePair { 
@@ -50,4 +52,8 @@ class MainGameState : public GameState
         float PIPE_H = 320.0f;  
 
         int puntuacion = 0;         
+        Texture2D birdSprite{};
+        Texture2D pipeSprite{};
+
+        float gap = player.height * 4.5f;
 };  
