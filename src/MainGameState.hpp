@@ -62,5 +62,7 @@ class MainGameState : public GameState
         Sound swoosh;
         
         bool audioReady = false;
-        Music music{};
+        //Music music{};
+
+        int pipecount = 0;
 };  

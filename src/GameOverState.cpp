@@ -4,13 +4,13 @@
 #include "MainGameState.hpp"
 #include <memory>
 
-
 extern "C" {
     #include <raylib.h>
 }
 
 GameOverState::GameOverState(int puntuacion){
-    this->puntuacion = puntuacion;
+    this->puntuacion = puntuacion; 
+
 }   
 
 GameOverState::GameOverState(){
@@ -40,9 +40,10 @@ void GameOverState::render(){
     //muestro la puntuacion obtenida    
     DrawText(TextFormat("Puntuacion: %d", puntuacion), 60, 240, 28, RED);
     DrawText("ENTER para reiniciar", 20, 300, 18, BLACK);
-    
+        
     EndDrawing();
 }
+
 
 
     

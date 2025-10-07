@@ -62,7 +62,13 @@ void MainGameState::update(float deltaTime)
     spawnTimer += deltaTime;                    //al tiempo inicial le sumo el delta time 
 
     //CREACION DE TUBOS
-    if(spawnTimer >= spawnEvery){        
+    if(spawnTimer >= spawnEvery){ 
+        pipecount++;     
+        if(pipecount % 5 == 0){
+            spawnEvery -= 0.05f;               //cada 5 tubos la velocidad  y aparicion de tubos aumenta
+            PIPE_VELOCITY += 5;
+        }
+        
         float x = GetScreenWidth(); //posicion x del tubo el ancho de la pantalla
 
         float pipe_y_offset_top = GetRandomValue(PIPE_H/2, GetScreenWidth()/2);               //posicion y del tubo superior, maximo y minimo
@@ -147,8 +153,6 @@ void MainGameState::render()
 
     //sprite del jugador
     DrawTexture(this->birdSprite, player.x - birdSprite.width/2, player.y - birdSprite.height/2, WHITE);
-
-    //sprite de las tuberia
 
     EndDrawing();
 }
